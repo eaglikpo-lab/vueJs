@@ -1,20 +1,13 @@
 <template>
   <div id="app" class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
-    <!-- 🧭 Header -->
-    <header class="bg-white shadow-md sticky top-0 z-10">
-      <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold italic text-blue-600">Mon Blog Vue</h1>
 
-        <nav class="space-x-6 text-gray-600 font-medium">
-          <router-link to="/" class="hover:text-blue-600 transition">Accueil</router-link>
-          <router-link to="/about" class="hover:text-blue-600 transition">À propos</router-link>
-          <router-link to="/help" class="hover:text-blue-600 transition">Aide</router-link>
-          <router-link to="/login" class="text-blue-600 hover:underline">Connexion</router-link>
-        </nav>
-      </div>
-    </header> 
+    <!-- ✅ Header visible seulement si on n’est PAS sur les routes admin/user -->
+    <Header v-if="!hideHeader" />
 
-    <!-- <Header @show-login="showLoginModal = true" /-->
+    <!-- Header selon le rôle -->
+    <!-- <Header v-if="!userRole" />
+    <AdminHeader v-else-if="userRole === 'admin'" />
+    <UserHeader v-else-if="userRole === 'user'" /> -->
 
     <!-- 🧩 Page container -->
     <main class="flex-1 px-6 py-10">
@@ -28,21 +21,31 @@
   </div>
 </template>
 
-<!-- <script setup>
-  import Header from "./components/Header.vue";
-</script> -->
+<script setup>
+import { useRoute } from 'vue-router'
+import { computed } from 'vue' 
+import Header from './components/Header.vue'
+import AdminHeader from './components/AdminHeader.vue'
+import UserHeader from './components/UserHeader.vue'
 
-<!-- <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
-</template> -->
+const route = useRoute()
+const hideHeader = computed(() => {     // Header caché sur certaines routes
+  return route.path.startsWith('/admin') || route.path.startsWith('/user')
+})
+
+// import { ref, onMounted } from 'vue'
+
+// const userRole = ref(null)
+
+// onMounted(() => {
+//   const user = JSON.parse(localStorage.getItem('user'))
+//   if (user?.role) {
+//     console.log(user.role);
+    
+//     userRole.value = user.role
+//   }
+// })
+</script>
 
 <style scoped>
 .logo {

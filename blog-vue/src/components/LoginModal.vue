@@ -3,10 +3,8 @@
   <div v-if="show" class="overlay">
     <div class="modal">
       <!-- Croix de fermeture -->
-      <button
-        @click="emit('close')"
-        class="absolute top-[23%] right-[37%] text-gray-500 hover:text-gray-700 text-lg font-bold"
-      >
+      <button @click="emit('close')"
+        class="absolute top-[23%] right-[37%] text-gray-500 hover:text-gray-700 text-lg font-bold">
         &times;
       </button>
 
@@ -14,39 +12,23 @@
 
       <form @submit.prevent="login" class="space-y-4">
         <div>
-          <input
-            v-model="email"
-            type="email"
-            placeholder="Email"
-            required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          <input v-model="email" type="email" placeholder="Email" required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </div>
 
         <div>
-          <input
-            v-model="password"
-            type="password"
-            placeholder="Mot de passe"
-            required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          <input v-model="password" type="password" placeholder="Mot de passe" required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </div>
 
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
-        >
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
           Se connecter
         </button>
 
         <!-- Mot de passe oublié : rapproché -->
         <div class="text-center mt-1">
-          <router-link
-            to="/forgot"
-            class="text-blue-600 text-sm hover:underline"
-            @click="emit('close')"
-          >
+          <router-link to="/forgot" class="text-blue-600 text-sm hover:underline" @click="emit('close')">
             Mot de passe oublié ?
           </router-link>
         </div>
@@ -61,11 +43,9 @@
 
       <!-- Bouton d'inscription -->
       <div class="text-center">
-        <router-link
-          to="/register"
+        <router-link to="/register"
           class="inline-block bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition font-semibold shadow-md"
-          @click="emit('close')"
-        >
+          @click="emit('close')">
           Inscrivez-vous
         </router-link>
       </div>
@@ -94,8 +74,17 @@ async function login() {
       password: password.value,
     });
 
-    const { token, role } = response.data;
-    localStorage.setItem("authToken", token);
+    const { token, user, message } = response.data
+    // console.log("token",token);
+    // console.log("role",user.role);
+    // console.log("user",user);
+    console.log("message", message);
+
+    localStorage.setItem("authToken", token); // on enrégistre dans le storage local Pour récupération ultérieur
+    localStorage.setItem("user",JSON.stringify(user))
+    // console.log(localStorage.getItem("user"));
+    
+    const role = user.role;
 
     if (role === "admin") {
       router.push("/admin");
@@ -105,7 +94,6 @@ async function login() {
 
     emit("close");
   } catch (error) {
-    // alert("Email ou mot de passe incorrect");
     if (error.response) {
       console.log('Erreur:', error.response.data)
     } else {
@@ -141,6 +129,7 @@ async function login() {
     transform: scale(0.95);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;

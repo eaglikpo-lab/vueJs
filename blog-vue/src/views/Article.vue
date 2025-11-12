@@ -1,4 +1,8 @@
 <template>
+    <div v-if="previewMode" class="bg-yellow-100 text-yellow-800 text-center py-2 mb-4 font-semibold">
+      🔍 Vous êtes en mode aperçu administrateur
+    </div>
+
     <div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-xl">
         <button @click="$router.back()" class="text-blue-600 hover:underline mb-4 inline-flex items-center">
             ← Retour
@@ -38,112 +42,19 @@
                 </div>
 
                 <!-- Liste des commentaires -->
-                <div v-if="comments.length > 0" class="space-y-4">
-                    <div v-for="comment in comments" :key="comment.id" class="p-4 border rounded-lg bg-gray-50">
-                        <div class="flex items-start gap-4">
-                            <!-- avatar placeholder -->
-                            <div class="shrink-0">
-                                <div
-                                    class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm text-gray-600">
-                                    {{ (comment.user && comment.user.name ? comment.user.name[0] : 'U').toUpperCase() }}
-                                </div>
-                            </div>
+                <div v-if="comments.length" class="space-y-4">
+                    <!-- <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" :userId="userId"
+                        @reply="handleReply" @edit="startEdit" @delete="deleteComment" /> -->
 
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <p class="font-semibold text-gray-800">
-                                            {{ (comment.user && comment.user.name) || ('Utilisateur #' +
-                                            (comment.user_id ?? '')) }}
-                                        </p>
-                                        <p class="text-xs text-gray-500">il y a {{ timeAgo(comment.created_at) }}</p>
-                                    </div>
+                    <!-- parent template -->
+                    <CommentItem v-for="c in comments" :key="c.id" :comment="c" :userId="userId" @reply="handleReply"
+                        @updated="handleUpdated" @deleted="handleDelete" />
 
-                                    <div class="text-right">
-                                        <span>{{ comment }}</span>
-                                        <div v-if="isAuthor(comment)" class="flex items-center gap-2">
-                                            <button @click="startEdit(comment)"
-                                                class="text-sm text-blue-500">Modifier</button>
-                                            <button @click="deleteComment(comment.id)"
-                                                class="text-sm text-red-500">Supprimer</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <p class="mt-3 text-gray-700 whitespace-pre-line">{{ comment.content }}</p>
-
-                                <!-- edit form inline -->
-                                <div v-if="editingComment && editingComment.id === comment.id" class="mt-3">
-                                    <textarea v-model="editingComment.content"
-                                        class="w-full border rounded-lg p-2"></textarea>
-                                    <div class="mt-2 flex gap-2">
-                                        <button @click="updateComment"
-                                            class="bg-green-500 text-white px-3 py-1 rounded-lg">Sauvegarder</button>
-                                        <button @click="cancelEdit"
-                                            class="text-gray-600 px-3 py-1 rounded-lg">Annuler</button>
-                                    </div>
-                                </div>
-
-                                <!-- reply toggle -->
-                                <div class="mt-3">
-                                    <button @click="toggleReply(comment.id)"
-                                        class="text-sm text-blue-600 hover:underline">Répondre</button>
-                                    <div v-if="replyTo === comment.id" class="mt-2">
-                                        <textarea v-model="replyContent" placeholder="Votre réponse..."
-                                            class="w-full border rounded-lg p-2"></textarea>
-                                        <div class="mt-2 flex gap-2">
-                                            <button @click="addReply(comment.id)"
-                                                class="bg-blue-500 text-white px-3 py-1 rounded-lg">Publier la
-                                                réponse</button>
-                                            <button @click="cancelReply"
-                                                class="text-gray-600 px-3 py-1 rounded-lg">Annuler</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- replies -->
-                                <div v-if="comment.replies && comment.replies.length" class="mt-4 border-l pl-4">
-                                    <div v-for="reply in comment.replies" :key="reply.id" class="mb-3">
-                                        <div class="flex justify-between">
-                                            <div>
-                                                <p class="font-semibold text-gray-800">{{ (reply.user &&
-                                                    reply.user.name) || ('Utilisateur #' + (reply.user_id ?? '')) }}</p>
-                                                <p class="text-xs text-gray-500">il y a {{ timeAgo(reply.created_at) }}
-                                                </p>
-                                            </div>
-                                            <div v-if="isAuthor(reply)">
-                                                <button @click="startEdit(reply)"
-                                                    class="text-sm text-blue-500 mr-2">Modifier</button>
-                                                <button @click="deleteComment(reply.id)"
-                                                    class="text-sm text-red-500">Supprimer</button>
-                                            </div>
-                                        </div>
-                                        <p class="text-gray-700 mt-1">{{ reply.content }}</p>
-
-                                        <!-- reply toggle -->
-                                        <div class="mt-3">
-                                            <button @click="toggleReply(comment.id)"
-                                                class="text-sm text-blue-600 hover:underline">Répondre</button>
-                                            <div v-if="replyTo === comment.id" class="mt-2">
-                                                <textarea v-model="replyContent" placeholder="Votre réponse..."
-                                                    class="w-full border rounded-lg p-2"></textarea>
-                                                <div class="mt-2 flex gap-2">
-                                                    <button @click="addReply(comment.id)"
-                                                        class="bg-blue-500 text-white px-3 py-1 rounded-lg">Publier la
-                                                        réponse</button>
-                                                    <button @click="cancelReply"
-                                                        class="text-gray-600 px-3 py-1 rounded-lg">Annuler</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
+
                 <p v-else class="text-gray-500 italic">Aucun commentaire pour le moment.</p>
+
             </section>
         </div>
 
@@ -157,18 +68,46 @@
 import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import axios from "axios"
+import CommentItem from "../components/CommentItem.vue"
 
 const route = useRoute()
 const article = ref(null)
 const comments = ref([])
 const newComment = ref("")
-const replyContent = ref("")
-const replyTo = ref(null)
-const editingComment = ref(null)
+const previewMode = ref(false);
 
 const token = localStorage.getItem("authToken")
 const isAuthenticated = !!token
-const userId = Number(localStorage.getItem("userId")) // s'assurer number
+
+const storedUser = localStorage.getItem("user")   // toutes les infos sur le user connecté
+const user = ref(storedUser ? JSON.parse(storedUser) : null)
+// console.log(user);
+
+const uId = ref(user.value ? user.value.id : null) // Accéder à l'email
+// console.log(userId.value);
+
+
+const userId = Number(uId.value) // s'assurer number
+console.log(userId);
+
+
+function handleUpdated(updated) {
+  // recherche récursive pour mettre à jour le commentaire dans comments (comme before)
+  const updateRecursively = (arr) => {
+    for (const c of arr) {
+      if (c.id === updated.id) {
+        c.content = updated.content
+        return true
+      }
+      if (c.replies) {
+        if (updateRecursively(c.replies)) return true
+      }
+    }
+    return false
+  }
+  updateRecursively(comments.value)
+}
+
 
 // UTIL: normaliser un commentaire serveur -> structure front attendue
 function normalizeComment(server) {
@@ -188,6 +127,7 @@ function normalizeComment(server) {
 // Charger article + commentaires
 onMounted(async () => {
     const id = route.params.id
+    console.log(id);
     try {
         const [articleRes, commentRes] = await Promise.all([
             axios.get(`http://localhost:8000/api/articles/${id}`),
@@ -200,6 +140,7 @@ onMounted(async () => {
         // normaliser la liste des commentaires
         const serverComments = commentRes.data.comments ?? commentRes.data
         comments.value = Array.isArray(serverComments) ? serverComments.map(normalizeComment) : []
+        
     } catch (err) {
         console.error(err)
     }
@@ -219,6 +160,8 @@ async function addComment() {
         const serverComment = res.data.comment ?? res.data
         comments.value.push(normalizeComment(serverComment))
         newComment.value = ""
+        return;
+
     } catch (err) {
         console.error(err)
         if (err.response && err.response.status === 422) {
@@ -235,82 +178,8 @@ function clearNewComment() {
     newComment.value = ""
 }
 
-// Ajouter une réponse
-async function addReply(parentId) {
-    if (!replyContent.value.trim()) return
-    try {
-        const res = await axios.post(
-            `http://localhost:8000/api/articles/${article.value.id}/comments`,
-            { contenu: replyContent.value, parent_id: parentId },
-            { headers: { Authorization: `Bearer ${token}` } }
-        )
-
-        const serverComment = res.data.comment ?? res.data
-        const mapped = normalizeComment(serverComment)
-        const parent = comments.value.find(c => c.id === parentId)
-        if (parent) {
-            parent.replies = parent.replies || []
-            parent.replies.push(mapped)
-        } else {
-            // si parent non trouvé (rare), push top-level
-            comments.value.push(mapped)
-        }
-        replyTo.value = null
-        replyContent.value = ""
-    } catch (err) {
-        console.error(err)
-        alert("Erreur lors de l'ajout de la réponse.")
-    }
-}
-
-function cancelReply() {
-    replyContent.value = ""
-    replyTo.value = null
-}
-
-// Modifier un commentaire
-function startEdit(comment) {
-    editingComment.value = { id: comment.id, content: comment.content }
-}
-
-function cancelEdit() {
-    editingComment.value = null
-}
-
-async function updateComment() {
-    if (!editingComment.value || !editingComment.value.content.trim()) return
-    try {
-        const res = await axios.put(
-            `http://localhost:8000/api/comments/${editingComment.value.id}`,
-            { contenu: editingComment.value.content },
-            { headers: { Authorization: `Bearer ${token}` } }
-        )
-        const serverUpdated = res.data.comment ?? res.data
-        const updated = normalizeComment(serverUpdated)
-
-        // mettre à jour récursivement
-        const updateRecursively = (arr) => {
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i].id === updated.id) {
-                    arr[i].content = updated.content
-                    return true
-                }
-                if (arr[i].replies && arr[i].replies.length) {
-                    if (updateRecursively(arr[i].replies)) return true
-                }
-            }
-            return false
-        }
-        updateRecursively(comments.value)
-        editingComment.value = null
-    } catch (err) {
-        console.error(err)
-        alert("Erreur lors de la mise à jour.")
-    }
-}
-
 // Supprimer un commentaire
-async function deleteComment(id) {
+async function handleDelete(id) {
     if (!confirm("Supprimer ce commentaire ?")) return
     try {
         await axios.delete(`http://localhost:8000/api/comments/${id}`, {
@@ -328,15 +197,34 @@ async function deleteComment(id) {
     }
 }
 
-function toggleReply(commentId) {
-    replyTo.value = replyTo.value === commentId ? null : commentId
-}
+async function handleReply({ parentId, content }) {
+    try {
+        const res = await axios.post(
+            `http://localhost:8000/api/articles/${article.value.id}/comments`,
+            { contenu: content, parent_id: parentId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
 
-function isAuthor(comment) {
-    console.log(userId);
-    const estAutheur = Number(comment.user_id) === Number(userId);
-    console.log(estAutheur);
-    return Number(comment.user_id) === Number(userId)
+        const newReply = normalizeComment(res.data.comment ?? res.data)
+
+        // fonction récursive pour insérer la réponse au bon endroit
+        const insertReply = (arr) => {
+            for (const c of arr) {
+                if (c.id === parentId) {
+                    c.replies = c.replies || []
+                    c.replies.push(newReply)
+                    return true
+                }
+                if (c.replies && insertReply(c.replies)) return true
+            }
+            return false
+        }
+
+        insertReply(comments.value)
+    } catch (err) {
+        console.error(err)
+        alert("Erreur lors de la publication de la réponse.")
+    }
 }
 
 // timeAgo util simple (tu peux remplacer par dayjs)

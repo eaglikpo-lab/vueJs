@@ -49,25 +49,24 @@ import axios from 'axios'
 // Champs du formulaire
 const email = ref('')
 const password = ref('')
+// const message = ref('')
 
-// Pour la navigation après login
-const router = useRouter()
+const router = useRouter()      // Pour la navigation après login
 
-// Fonction login appelée lors du submit
-async function login() {
+async function login() {        // Fonction login appelée lors du submit
   try {
-    
-    
     const response = await axios.post('http://127.0.0.1:8000/api/login', {
       email: email.value,
       password: password.value
     })
 
-    // Laravel renvoie { token, role }
-    // const { token, role } = response.data
-    const { token, role, user } = response.data
+    // Laravel renvoie { token, role, message }
+    const { token, user, message } = response.data
+    console.log("token", token);
+    console.log("user", user);
+    console.log("message", message);
 
-    
+    return;
     //  Stocker tout dans le localStorage
     localStorage.setItem('authToken', token)
     localStorage.setItem('user', JSON.stringify(user)) // convertir en string JSON
@@ -86,13 +85,12 @@ async function login() {
       router.push('/user')
     }
   } catch (error) {
-    // alert('Email ou mot de passe incorrect')
     if (error.response) {
       console.log('Erreur:', error.response.data)
     } else {
       console.error('Erreur inconnue:', error)
     }
-    
+
   }
 }
 </script>

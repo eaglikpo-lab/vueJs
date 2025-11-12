@@ -1,0 +1,112 @@
+<template>
+  <div class="p-4 rounded-lg bg-gray-50 mt-2">
+
+    <div class="flex items-start gap-4">
+      <!-- Avatar -->
+      <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm text-gray-600">
+        {{ (comment.user?.name ? comment.user.name[0] : 'U').toUpperCase() }}
+      </div>
+
+      <div class="flex-1">
+        <!-- Header -->
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-semibold text-gray-800" >
+              {{ comment.user?.name || ('Utilisateur #' + (comment.user_id ?? '')) }}
+            </p>
+
+            <p class="text-xs text-gray-500">{{ timeAgo(comment.created_at) }}</p>
+            
+            <!-- Affichage du nombre de réponses -->
+            <span v-if="comment.replies.length > 0" class="toggle-replies" @click="toggleReplies(comment.id)">
+              {{ comment.replies.length }} réponses
+            </span>
+          </div>
+
+          <div v-if="isAuthor(comment)" class="flex items-center gap-2 text-sm">
+            <button @click="$emit('edit', comment)" class="text-blue-500">Modifier</button>
+            <button @click="$emit('delete', comment.id)" class="text-red-500">Supprimer</button>
+          </div>
+        </div>
+
+        <!-- Contenu -->
+        <p class="mt-3 text-gray-700 whitespace-pre-line text-justify">{{ comment.content }}</p>
+
+        <!-- Bouton Répondre -->
+        <div class="mt-2">
+          <button @click="toggleReply(comment.id)" class="text-sm text-blue-600 hover:underline">
+            Répondre
+          </button>
+        </div>
+
+        <!-- Formulaire de réponse -->
+        <div v-if="replyTo === comment.id" class="mt-2">
+          <textarea v-model="replyContent" placeholder="Votre réponse..."
+            class="w-full border rounded-lg p-2"></textarea>
+          <div class="mt-2 flex gap-2">
+            <button @click="emitReply(comment.id)" class="bg-blue-500 text-white px-3 py-1 rounded-lg">
+              Publier la réponse
+            </button>
+            <button @click="cancelReply" class="text-gray-600 px-3 py-1 rounded-lg">Annuler</button>
+          </div>
+        </div>
+
+        <!-- Sous-commentaires (récursif) -->
+        <div v-if="comment.replies?.length" class="mt-4 border-l-2 border-gray-200 pl-4 space-y-2">
+          <CommentItem v-for="child in comment.replies" :key="child.id" :comment="child" :userId="userId"
+            @reply="$emit('reply', $event)" @edit="$emit('edit', $event)" @delete="$emit('delete', $event)" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue"
+import CommentItem from "./CommentItem.vue" // récursion
+
+const props = defineProps({
+  comment: Object,
+  userId: Number,
+})
+
+const emit = defineEmits(["reply", "edit", "delete"])
+
+const replyTo = ref(null)
+const replyContent = ref("")
+
+
+function toggleReply(id) {
+  replyTo.value = replyTo.value === id ? null : id
+}
+
+function cancelReply() {
+  replyContent.value = ""
+  replyTo.value = null
+}
+
+function emitReply(parentId) {
+  if (!replyContent.value.trim()) return
+  emit("reply", { parentId, content: replyContent.value })
+  replyContent.value = ""
+  replyTo.value = null
+}
+
+// utilitaire temps
+function timeAgo(dateString) {
+  if (!dateString) return "il y a un moment"
+  const date = new Date(dateString)
+  const now = new Date()
+  const seconds = Math.floor((now - date) / 1000)
+  const intervals = { an: 31536000, mois: 2592000, semaine: 604800, jour: 86400, heure: 3600, minute: 60 }
+  for (const [unit, value] of Object.entries(intervals)) {
+    const count = Math.floor(seconds / value)
+    if (count >= 1) return `il y a ${count} ${unit}${count > 1 ? "s" : ""}`
+  }
+  return "à l'instant"
+}
+
+function isAuthor(comment) {
+  return Number(comment.user_id) === Number(props.userId)
+}
+</script>

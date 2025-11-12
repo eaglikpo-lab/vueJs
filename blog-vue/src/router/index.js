@@ -22,7 +22,16 @@ const routes = [
     name: 'ArticleView',
     component: () => import('../views/Article.vue'),
     props: true
-  }
+  },
+
+  {
+  path: "/preview/article/:id",
+  name: "article-preview",
+  component: () => import("../views/Article.vue"),
+  // component: () => import("../views/UserDashboard.vue"),
+  meta: { preview: true }
+}
+
 ]
 
 const router = createRouter({
