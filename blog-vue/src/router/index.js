@@ -7,6 +7,8 @@ import RegisterView from '../views/RegisterView.vue'
 import ForgotView from '../views/ForgotView.vue'
 import ResetPassView from '../views/ResetPassView.vue'
 import Acceuil from '../views/Acceuil.vue'
+import About from '../views/About.vue'
+import Help from '../views/Help.vue'
 
 const routes = [
   // { path: '/', component: HomeView },
@@ -17,6 +19,8 @@ const routes = [
   { path: '/forgot', component: ForgotView },
   { path: '/reset-password', component: ResetPassView },
   { path: '/', component: Acceuil },
+  {path: '/about', component: About},
+  {path: '/help', component: Help},
   {
     path: '/articles/:id',
     name: 'ArticleView',

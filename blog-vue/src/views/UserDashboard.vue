@@ -11,12 +11,12 @@
 
 
     <!-- Header avec profil -->
+    <!-- <UserHeader /> -->
     <div class="flex justify-between items-center mb-10 max-w-6xl mx-auto">
       <div>
         <h2 class="text-4xl font-bold text-blue-600 mb-1">Bienvenue sur votre Dashboard</h2>
         <p class="text-gray-600 text-lg">Derniers articles classés par catégories ✨</p>
       </div>
-
       <!-- Profil -->
       <!-- <div class="flex items-center space-x-3">
         <div
@@ -89,6 +89,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute } from 'vue-router'
+import UserHeader from "../components/UserHeader.vue";
 
 const route = useRoute();
 

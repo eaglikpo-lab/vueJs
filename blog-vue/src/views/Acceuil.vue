@@ -149,6 +149,7 @@ onMounted(() => {
   setTimeout(() => {
     showModal.value = true;
   }, 15000); // 30 000 ms = 0.5 minute
+
 });
 
 </script>

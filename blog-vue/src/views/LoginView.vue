@@ -14,7 +14,6 @@
           <label class="block text-gray-700 mb-1">Mot de passe
 
             <span class="text-right">
-              <!-- a href="/forget" class="ml-37 text-blue-600 hover:underline text-sm">Mot de passe oublié ?</a> -->
               <router-link to="/forgot" class="ml-37 text-blue-600 hover:underline text-sm transition">
                 Mot de passe oublié?
               </router-link>
@@ -49,7 +48,6 @@ import axios from 'axios'
 // Champs du formulaire
 const email = ref('')
 const password = ref('')
-// const message = ref('')
 
 const router = useRouter()      // Pour la navigation après login
 
@@ -66,7 +64,6 @@ async function login() {        // Fonction login appelée lors du submit
     console.log("user", user);
     console.log("message", message);
 
-    return;
     //  Stocker tout dans le localStorage
     localStorage.setItem('authToken', token)
     localStorage.setItem('user', JSON.stringify(user)) // convertir en string JSON
@@ -78,7 +75,10 @@ async function login() {        // Fonction login appelée lors du submit
     console.log('Connexion réussie:', message)
     console.log('Utilisateur connecté:', user)
 
+    const User = JSON.parse(localStorage.getItem('user'))
+
     // Redirection selon le rôle
+    const role = User.role;
     if (role === 'admin') {
       router.push('/admin')
     } else {

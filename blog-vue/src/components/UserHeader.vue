@@ -7,8 +7,8 @@
 
       <nav class="space-x-6 text-gray-600 font-medium flex items-center">
         <router-link to="/user" class="hover:text-blue-600 transition">Accueil</router-link>
-        <router-link to="/user/articles" class="hover:text-blue-600 transition">Articles</router-link>
-        <router-link to="/user/categories" class="hover:text-blue-600 transition">Catégories</router-link>
+        <router-link to="/about" class="hover:text-blue-600 transition">À propos</router-link>
+        <router-link to="/help" class="hover:text-blue-600 transition">Aide</router-link>
 
         <div class="flex items-center space-x-2">
           <div
@@ -32,8 +32,11 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
+// import { useUserStore } from '@/stores/user'
+// const userStore = useUserStore()
 
 const user = JSON.parse(localStorage.getItem('user'))
+console.log(user.role);
 
 const userInitials = computed(() => {
   if (!user) return '?'
@@ -46,9 +49,20 @@ function goHome() {
 }
 
 function logout() {
-  localStorage.removeItem('user')
-  localStorage.removeItem('authToken')
+    // userStore.logout() // met à jour tout l'app et navigue vers '/'
+  localStorage.removeItem('user');
+
+  localStorage.removeItem('authToken');
+  
+  localStorage.clear();
   router.push('/')
-  window.location.reload()
+  console.log("push vers Acceuil");
+  // window.location.reload()
+  // console.log("reload effectué");
+  window.location.href = '/'   
+  console.log(localStorage.getItem('authToken'));
+  console.log(localStorage.getItem('user'));
+  router.push('/')
+  
 }
 </script>

@@ -2,13 +2,18 @@
   <div id="app" class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
 
     <!-- ✅ Header visible seulement si on n’est PAS sur les routes admin/user -->
-    <Header v-if="!hideHeader" />
+    <!-- <Header v-if="!hideHeader" /> -->
+
+    <UserHeader v-if="userHeader && userRole=== 'user'"/>
+    <!-- <AdminHeader v-else-if="adminHeader && userRole=== 'admin'"/> -->
+    <Header v-else-if="!userHeader && !adminHeader"/>
+
 
     <!-- Header selon le rôle -->
     <!-- <Header v-if="!userRole" />
     <AdminHeader v-else-if="userRole === 'admin'" />
-    <UserHeader v-else-if="userRole === 'user'" /> -->
-
+    <UserHeader v-else-if="userRole === 'user'" />  -->
+    
     <!-- 🧩 Page container -->
     <main class="flex-1 px-6 py-10">
       <router-view />
@@ -29,22 +34,33 @@ import AdminHeader from './components/AdminHeader.vue'
 import UserHeader from './components/UserHeader.vue'
 
 const route = useRoute()
+const userHeader = computed(() => {
+  return route.path.startsWith('/user')
+});
+
+const adminHeader = computed(() => { return route.path.startsWith('/admin') })
+
 const hideHeader = computed(() => {     // Header caché sur certaines routes
   return route.path.startsWith('/admin') || route.path.startsWith('/user')
 })
 
-// import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 
-// const userRole = ref(null)
+const userRole = ref(null)
 
+// import { useUserStore } from '@/stores/user'
+// const userStore = useUserStore()
 // onMounted(() => {
-//   const user = JSON.parse(localStorage.getItem('user'))
-//   if (user?.role) {
-//     console.log(user.role);
-    
-//     userRole.value = user.role
-//   }
+//   userStore.initFromLocalStorage()
 // })
+
+onMounted(() => {
+  const user = JSON.parse(localStorage.getItem('user'))
+  if (user?.role) {
+    console.log(user.role);
+    userRole.value = user.role
+  }
+})
 </script>
 
 <style scoped>

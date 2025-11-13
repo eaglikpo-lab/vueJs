@@ -74,18 +74,17 @@ async function login() {
       password: password.value,
     });
 
-    const { token, user, message } = response.data
-    // console.log("token",token);
-    // console.log("role",user.role);
-    // console.log("user",user);
-    console.log("message", message);
+    const { token, user} = response.data
+  
 
     localStorage.setItem("authToken", token); // on enrégistre dans le storage local Pour récupération ultérieur
     localStorage.setItem("user",JSON.stringify(user))
     // console.log(localStorage.getItem("user"));
     
-    const role = user.role;
+    const User = JSON.parse(localStorage.getItem('user'))
 
+    // Redirection selon le rôle
+    const role = User.role;
     if (role === "admin") {
       router.push("/admin");
     } else {
