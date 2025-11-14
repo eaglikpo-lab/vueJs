@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-50 min-h-screen py-12 px-6">
+ <section class="bg-gray-50 min-h-screen py-12 px-6">
     <!-- En-tête -->
     <div class="text-center mb-10">
       <h2 class="text-4xl font-bold text-blue-600 mb-4">
@@ -9,9 +9,6 @@
         Découvrez les derniers articles classés par catégories ✨
       </p>
     </div>
-
-    <!-- Fenêtre de connexion -->
-    <LoginModal v-if="showModal" :show="showModal" @close="showModal = false" />
 
     <!-- Catégories -->
     <div class="flex flex-wrap justify-center gap-3 mb-10">
@@ -31,7 +28,7 @@
       </button>
     </div>
 
-    <!-- Articles -->
+<!-- Articles -->
     <div
       v-if="filteredArticles.length"
       class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto"
@@ -74,20 +71,18 @@
   </section>
 </template>
 
+
+
 <script setup>
+
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-
-import LoginModal from "../components/LoginModal.vue";
-
 
 const router = useRouter();
 
 const categories = ref([]);
 const articles = ref([]);
 const filteredArticles = ref([]);
-const isAuthenticated = ref(false);
-const showModal = ref(false);
 
 // Charger les catégories
 const fetchCategories = async () => {
@@ -124,14 +119,10 @@ const filterByCategory = (categoryName) => {
   }
 };
 
+
 // Redirection selon authentification
 const handleAction = (articleId) => {
-  if (!isAuthenticated.value) {
-    // router.push("/login");
-    showModal.value = true; // ouvre la modale LoginModal
-  } else {
     router.push(`/articles/${articleId}`);
-  }
 };
 
 // Tronquer le texte
@@ -144,12 +135,5 @@ const truncate = (text, length) => {
 onMounted(() => {
   fetchCategories();
   fetchArticles();
-
-   // Laisse l’utilisateur explorer pendant 60 secondes
-  setTimeout(() => {
-    showModal.value = true;
-  }, 15000); // 30 000 ms = 0.5 minute
-
 });
-
 </script>

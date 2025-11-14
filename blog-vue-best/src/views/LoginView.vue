@@ -43,54 +43,23 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { useUserStore } from '../store/user'
+const userStore = useUserStore()
+
+const router = useRouter()      // Pour la navigation après login
 
 // Champs du formulaire
 const email = ref('')
 const password = ref('')
+const error = ref(null)
 
-const router = useRouter()      // Pour la navigation après login
-
-async function login() {        // Fonction login appelée lors du submit
-  try {
-    const response = await axios.post('http://127.0.0.1:8000/api/login', {
-      email: email.value,
-      password: password.value
-    })
-
-    // Laravel renvoie { token, role, message }
-    const { token, user, message } = response.data
-    console.log("token", token);
-    console.log("user", user);
-    console.log("message", message);
-
-    //  Stocker tout dans le localStorage
-    localStorage.setItem('authToken', token)
-    localStorage.setItem('user', JSON.stringify(user)) // convertir en string JSON
-
-    // ✅ Optionnel : si tu veux tout garder ensemble
-    // localStorage.setItem('authData', JSON.stringify(response.data))
-
-    // Message de succès
-    console.log('Connexion réussie:', message)
-    console.log('Utilisateur connecté:', user)
-
-    const User = JSON.parse(localStorage.getItem('user'))
-
-    // Redirection selon le rôle
-    const role = User.role;
-    if (role === 'admin') {
-      router.push('/admin')
-    } else {
-      router.push('/user')
-    }
-  } catch (error) {
-    if (error.response) {
-      console.log('Erreur:', error.response.data)
-    } else {
-      console.error('Erreur inconnue:', error)
+async function login() {
+    try {
+        await userStore.login(email.value, password.value)
+    } catch (err) {
+        error.value = err.response?.data.message || 'Erreur inconnue'
     }
 
-  }
 }
+
 </script>

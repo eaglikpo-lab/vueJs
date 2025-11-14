@@ -13,7 +13,7 @@
           {{ item.label }}
         </button>
       </nav>
-      <button @click="logout" class="m-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white">
+      <button @click="logout" class="m-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white cursor-pointer">
         Déconnexion
       </button>
     </aside>
@@ -74,6 +74,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
+const userStore = useUserStore()
+
 import AdminCategories from '../components/Admin/AdminCategories.vue'
 import AdminArticles from '../components/Admin/AdminArticles.vue'
 import AdminUsers from '../components/Admin/AdminUsers.vue'
@@ -82,7 +85,8 @@ import AdminComments from '../components/Admin/AdminComments.vue'
 const route = useRouter()
 
 // 🔐 Récupération des infos admin depuis le localStorage
-const user = JSON.parse(localStorage.getItem('user') || '{}')
+const userState = userStore.$state
+const user = userState.user
 
 // 🔹 Sections du tableau de bord
 const menuItems = [
@@ -104,9 +108,7 @@ const currentTitle = computed(() => {
 
 // 🚪 Déconnexion
 function logout() {
-  localStorage.removeItem('authToken')
-  localStorage.removeItem('user')
-  route.push('/')
+ userStore.logout()
 }
 </script>
 

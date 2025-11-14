@@ -56,49 +56,26 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import { useUserStore } from "../store/user";
+
 
 const props = defineProps({
   show: Boolean,
 });
 const emit = defineEmits(["close"]);
 
-const router = useRouter();
 const email = ref("");
 const password = ref("");
+const error = ref(null);
 
+const userStore = useUserStore()
 async function login() {
-  try {
-    const response = await axios.post("http://localhost:8000/api/login", {
-      email: email.value,
-      password: password.value,
-    });
-
-    const { token, user} = response.data
-  
-
-    localStorage.setItem("authToken", token); // on enrégistre dans le storage local Pour récupération ultérieur
-    localStorage.setItem("user",JSON.stringify(user))
-    // console.log(localStorage.getItem("user"));
-    
-    const User = JSON.parse(localStorage.getItem('user'))
-
-    // Redirection selon le rôle
-    const role = User.role;
-    if (role === "admin") {
-      router.push("/admin");
-    } else {
-      router.push("/user");
+    try {
+        await userStore.login(email.value, password.value)
+    } catch (err) {
+        error.value = err.response?.data.message || 'Erreur inconnue'
     }
 
-    emit("close");
-  } catch (error) {
-    if (error.response) {
-      console.log('Erreur:', error.response.data)
-    } else {
-      console.error('Erreur inconnue:', error)
-    }
-  }
 }
 </script>
 

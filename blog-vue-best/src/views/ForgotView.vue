@@ -37,8 +37,6 @@
           @click="handleAction()"
       >
       Retour à la connexion
-      <!-- <router-link to="/login" class="text-blue-600 hover:text-blue-800 font-medium transition">
-        </router-link> -->
       </p>
     </div>
   </section>

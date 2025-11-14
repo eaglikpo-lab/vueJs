@@ -156,5 +156,5 @@ const progress = computed(() => activeFaq.value ? Math.round(((currentStep.value
 .slide-right-fade-leave-to { transform: translateX(30%); opacity: 0; }
 
 /* line clamp */
-.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-2 { display: -webkit-box; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 </style>

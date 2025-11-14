@@ -74,6 +74,9 @@
 import { ref } from "vue"
 import { defineAsyncComponent } from "vue"
 import axios from "axios"
+import { useUserStore } from "../store/user"
+const userStore = useUserStore()
+const userState = userStore.$state
 
 // récursion asynchrone 
 const CommentItem = defineAsyncComponent(() => import('./CommentItem.vue'))
@@ -128,10 +131,9 @@ async function saveEdit() {
     // Appel PUT à Laravel API : /api/comments/{id}
     const url = `http://127.0.0.1:8000/api/comments/${props.comment.id}`
     const payload = { contenu: editingContent.value } // adapter si API attend 'content'
-      const token = localStorage.getItem("authToken")
+      const token = userState.token
       console.log("token", token);
       console.log('playload', payload);
-    
     
     const res = await axios.put(url, payload, { headers: { Authorization: `Bearer ${token}` } })
       const updated = res.data.comment ?? res.data

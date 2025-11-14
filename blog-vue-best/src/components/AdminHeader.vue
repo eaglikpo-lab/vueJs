@@ -14,7 +14,7 @@
 
         <button
           @click="logout"
-          class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg text-white transition"
+          class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg text-white transition cursor-pointer"
         >
           Déconnexion
         </button>
@@ -25,6 +25,8 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
+const userStore = useUserStore()
 const router = useRouter()
 
 function goDashboard() {
@@ -32,9 +34,6 @@ function goDashboard() {
 }
 
 function logout() {
-  localStorage.removeItem('user')
-  localStorage.removeItem('authToken')
-  router.push('/')
-  window.location.reload()
+ userStore.logout()
 }
 </script>

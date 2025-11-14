@@ -32,11 +32,12 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
-// import { useUserStore } from '@/stores/user'
-// const userStore = useUserStore()
 
-const user = JSON.parse(localStorage.getItem('user'))
-console.log(user.role);
+import { useUserStore } from '../store/user'
+const userStore = useUserStore()
+
+const userState = userStore.$state
+const user = userState.user
 
 const userInitials = computed(() => {
   if (!user) return '?'
@@ -49,20 +50,6 @@ function goHome() {
 }
 
 function logout() {
-    // userStore.logout() // met à jour tout l'app et navigue vers '/'
-  localStorage.removeItem('user');
-
-  localStorage.removeItem('authToken');
-  
-  localStorage.clear();
-  router.push('/')
-  console.log("push vers Acceuil");
-  // window.location.reload()
-  // console.log("reload effectué");
-  window.location.href = '/'   
-  console.log(localStorage.getItem('authToken'));
-  console.log(localStorage.getItem('user'));
-  router.push('/')
-  
+    userStore.logout() // met à jour tout l'app et navigue vers '/'
 }
 </script>

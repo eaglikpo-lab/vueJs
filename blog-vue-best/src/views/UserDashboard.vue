@@ -11,27 +11,11 @@
 
 
     <!-- Header avec profil -->
-    <!-- <UserHeader /> -->
     <div class="flex justify-between items-center mb-10 max-w-6xl mx-auto">
       <div>
-        <h2 class="text-4xl font-bold text-blue-600 mb-1">Bienvenue sur votre Dashboard</h2>
-        <p class="text-gray-600 text-lg">Derniers articles classés par catégories ✨</p>
+        <h2 class="text-4xl font-bold text-blue-600 mb-1">Bienvenue sur votre espace utilisateur</h2>
+        <p class="text-gray-600 text-lg">Découvrez les derniers articles classés par catégories ✨</p>
       </div>
-      <!-- Profil -->
-      <!-- <div class="flex items-center space-x-3">
-        <div
-          v-if="userAvatar"
-          class="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500"
-        >
-          <img :src="userAvatar" alt="Profil" class="w-full h-full object-cover" />
-        </div>
-        <div
-          v-else
-          class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-lg"
-        >
-          {{ userInitials }}
-        </div>
-      </div> -->
     </div>
 
     <!-- Catégories -->
@@ -89,7 +73,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute } from 'vue-router'
-import UserHeader from "../components/UserHeader.vue";
+import { useUserStore } from '../store/user'
 
 const route = useRoute();
 
@@ -101,18 +85,13 @@ const loading = ref(false);
 
 console.log("User credentials in localStorage");
 
-
-// Récupérer la chaîne JSON depuis localStorage
-const storedUser = localStorage.getItem("user")   // toutes les infos sur le user connecté
-// console.log(storedUser)
-
-const user = ref(storedUser ? JSON.parse(storedUser) : null)
+const userStore = useUserStore()
+const userState = userStore.$state
+const user = userState.user
 console.log(user);
 
 const userEmail = ref(user.value ? user.value.email : null) // Accéder à l'email
 const userId = ref(user.value ? user.value.id : null) // Accéder à l'email
-const userInitials = ref(userEmail.value[0].toUpperCase());
-
 
 console.log(userEmail.value);
 console.log(userId.value);

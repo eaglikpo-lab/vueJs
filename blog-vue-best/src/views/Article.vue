@@ -43,8 +43,6 @@
 
                 <!-- Liste des commentaires -->
                 <div v-if="comments.length" class="space-y-4">
-                    <!-- <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" :userId="userId"
-                        @reply="handleReply" @edit="startEdit" @delete="deleteComment" /> -->
 
                     <!-- parent template -->
                     <CommentItem v-for="c in comments" :key="c.id" :comment="c" :userId="userId" @reply="handleReply"
@@ -69,6 +67,9 @@ import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import axios from "axios"
 import CommentItem from "../components/CommentItem.vue"
+import { useUserStore } from "../store/user"
+const userStore = useUserStore()
+const userState = userStore.$state
 
 const route = useRoute()
 const article = ref(null)
@@ -76,16 +77,14 @@ const comments = ref([])
 const newComment = ref("")
 const previewMode = ref(false);
 
-const token = localStorage.getItem("authToken")
+const token = userState.token
 const isAuthenticated = !!token
 
-const storedUser = localStorage.getItem("user")   // toutes les infos sur le user connecté
-const user = ref(storedUser ? JSON.parse(storedUser) : null)
+const user = userState?userState.user:null
 // console.log(user);
 
-const uId = ref(user.value ? user.value.id : null) // Accéder à l'email
+const uId = ref(user? user.id : null) // Accéder à l'email
 // console.log(userId.value);
-
 
 const userId = Number(uId.value) // s'assurer number
 console.log(userId);

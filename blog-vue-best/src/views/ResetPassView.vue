@@ -1,11 +1,3 @@
-<!-- <template>
-  <section>
-    <h2>Espace Utilisateur</h2>
-    <p>Bienvenue sur ton espace personnel !</p>
-  </section>
-</template> -->
-
-
 <template>
   <section class="flex justify-center items-center h-screen bg-linear-to-br from-blue-50 to-blue-100">
     <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
@@ -77,8 +69,6 @@
           @click="handleAction()"
       >
         Retour à la connexion
-        <!-- <router-link to="/login" class="text-blue-600 hover:text-blue-800 font-medium transition cursor-pointer">
-        </router-link> -->
       </p>
     </div>
   </section>
