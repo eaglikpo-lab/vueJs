@@ -79,7 +79,9 @@ export const useUserStore = defineStore('user', {
         }
       } catch (error) {
         if (error.response) {
-          console.log('Erreur:', error.response.data)
+          console.log('Erreur:', error.response.data.message)
+          alert(error.response.data.message)
+          // alert("Identifiants incorrects, réessayer")
         } else {
           console.error('Erreur inconnue:', error)
         }

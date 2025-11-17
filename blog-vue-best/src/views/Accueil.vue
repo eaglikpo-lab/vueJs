@@ -57,7 +57,7 @@
         </p>
         <button
           @click="handleAction(article.id)"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition cursor-pointer"
         >
           Lire plus →
         </button>
@@ -86,13 +86,15 @@ const filteredArticles = ref([]);
 
 // Charger les catégories
 const fetchCategories = async () => {
-  const res = await fetch("http://localhost:8000/api/categories");
+  // const res = await fetch("http://localhost:8000/api/categories");
+  const res = await fetch(import.meta.env.VITE_API_URL + "/categories");
   categories.value = await res.json();
 };
 
 // Charger les articles
 const fetchArticles = async () => {
-  const res = await fetch("http://localhost:8000/api/articles");
+  // const res = await fetch("http://localhost:8000/api/articles");
+  const res = await fetch(import.meta.env.VITE_API_URL + "/articles");
   const data = await res.json();
 
   if (Array.isArray(data.data)) {

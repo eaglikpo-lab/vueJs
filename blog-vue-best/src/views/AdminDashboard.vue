@@ -39,30 +39,30 @@
       </section>
 
       <section v-else-if="activeSection === 'categories'">
-        <h2 class="text-xl font-semibold mb-4">Gérer les catégories</h2>
+        <!-- <h2 class="text-xl font-semibold mb-4">Gérer les catégories</h2> -->
         <p>Liste, ajout, modification et suppression des catégories ici.</p>
         <AdminCategories />
       </section>
 
       <section v-else-if="activeSection === 'articles'">
-        <h2 class="text-xl font-semibold mb-4">Gérer les articles</h2>
+        <!-- <h2 class="text-xl font-semibold mb-4">Gérer les articles</h2> -->
         <p>Créer, éditer, supprimer et approuver les articles ici.</p>
         <AdminArticles />
       </section>
 
       <section v-else-if="activeSection === 'users'">
-        <h2 class="text-xl font-semibold mb-4">Gérer les utilisateurs</h2>
+        <!-- <h2 class="text-xl font-semibold mb-4">Gérer les utilisateurs</h2> -->
         <p>Liste des utilisateurs, rôles et permissions.</p>
         <AdminUsers />
       </section>
 
       <section v-else-if="activeSection === 'comments'">
-        <h2 class="text-xl font-semibold mb-4">Gérer les commentaires</h2>
+        <!-- <h2 class="text-xl font-semibold mb-4">Gérer les commentaires</h2> -->
         <AdminComments />
       </section>
 
       <section v-else-if="activeSection === 'stats'">
-        <h2 class="text-xl font-semibold mb-4">Voir les statistiques</h2>
+        <!-- <h2 class="text-xl font-semibold mb-4">Voir les statistiques</h2> -->
         <p>Graphiques et données d’analyse à venir.</p>
       </section>
     </main>

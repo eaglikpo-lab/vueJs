@@ -10,7 +10,7 @@
         <router-link to="/admin/categories" class="hover:text-blue-400 transition">Catégories</router-link>
         <router-link to="/admin/articles" class="hover:text-blue-400 transition">Articles</router-link>
         <router-link to="/admin/users" class="hover:text-blue-400 transition">Utilisateurs</router-link>
-        <router-link to="/admin/stats" class="hover:text-blue-400 transition">Statistiques</router-link>
+        <!-- <router-link to="/admin/stats" class="hover:text-blue-400 transition">Statistiques</router-link> -->
 
         <button
           @click="logout"

@@ -10,6 +10,9 @@ import UserDashboard from '../views/UserDashboard.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import About from '../views/About.vue'
 import Help from '../views/Help.vue'
+import AdminCategories from '../components/Admin/AdminCategories.vue'
+import AdminArticles from '../components/Admin/AdminArticles.vue'
+import AdminUsers from '../components/Admin/AdminUsers.vue'
 
 const routes = [
   { path: '/', component: Accueil },
@@ -21,6 +24,10 @@ const routes = [
   { path: '/admin', component: AdminDashboard },
   {path: '/about', component: About},
   { path: '/help', component: Help },
+  { path: '/admin/categories', component: AdminCategories },
+  { path: '/admin/articles', component: AdminArticles },
+  { path: '/admin/users', component: AdminUsers },
+
   
   {
     path: '/articles/:id',

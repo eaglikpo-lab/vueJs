@@ -37,9 +37,9 @@
                     </div>
                 </div>
 
-                <div v-else class="text-gray-500 italic mb-6">
+                <!-- <div v-else class="text-gray-500 italic mb-6">
                     Connectez-vous pour commenter cet article.
-                </div>
+                </div> -->
 
                 <!-- Liste des commentaires -->
                 <div v-if="comments.length" class="space-y-4">
@@ -221,8 +221,12 @@ async function handleReply({ parentId, content }) {
 
         insertReply(comments.value)
     } catch (err) {
-        console.error(err)
-        alert("Erreur lors de la publication de la réponse.")
+        if (err.status === 401) {
+            console.error(err)
+            alert("Connectez vous pour commentez cet article")
+        } else {
+            alert("Erreur lors de la publication de la réponse.") 
+        }
     }
 }
 
