@@ -1,4 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+// import { createRouter, createWebHistory } from 'vue-router'
+import { createWebHashHistory, createRouter } from 'vue-router'
+
 import Accueil from '../views/Accueil.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ResetPassView from '../views/ResetPassView.vue'
@@ -38,7 +40,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(), // <-- hash mode
+  // history: createWebHistory(),
   routes,
 })
 
