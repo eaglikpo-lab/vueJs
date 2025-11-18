@@ -1,4 +1,5 @@
 <template>
+ 
  <section class="bg-gray-50 min-h-screen py-12 px-6">
     <!-- En-tête -->
     <div class="text-center mb-10">
@@ -77,24 +78,28 @@
 
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { API_URL } from "../utils/contants";
 
 const router = useRouter();
+
 
 const categories = ref([]);
 const articles = ref([]);
 const filteredArticles = ref([]);
 
+
+
 // Charger les catégories
 const fetchCategories = async () => {
   // const res = await fetch("http://localhost:8000/api/categories");
-  const res = await fetch(import.meta.env.VITE_API_URL + "/categories");
+  const res = await fetch(API_URL + "/categories");
   categories.value = await res.json();
 };
 
 // Charger les articles
 const fetchArticles = async () => {
   // const res = await fetch("http://localhost:8000/api/articles");
-  const res = await fetch(import.meta.env.VITE_API_URL + "/articles");
+  const res = await fetch(API_URL + "/articles");
   const data = await res.json();
 
   if (Array.isArray(data.data)) {
