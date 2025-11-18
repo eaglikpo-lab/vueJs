@@ -60,6 +60,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from "vue";
+import { API_URL } from '../utils/contants';
 
 const router = useRouter()
 
@@ -74,7 +75,7 @@ const handleRegister = async (e) => {
     message.value = "";
 
     try {
-        const response = await fetch("http://localhost:8000/api/register", {
+        const response = await fetch(`${API_URL}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
