@@ -2,9 +2,10 @@
 import { defineStore } from 'pinia'
 import router from '../router'    // si nécessaire pour redirection dans store
 import axios from 'axios'
+import { API_URL } from '../utils/contants'
 
 
-const api = axios.create({ baseURL: '${API_URL}' })
+const api = axios.create({ baseURL: `${API_URL}` })
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -55,7 +56,7 @@ export const useUserStore = defineStore('user', {
     async login(email, password) {
       try {
         const { data } = await axios.post(
-          '${API_URL}/login',
+          `${API_URL}/login`,
           { email, password }
         )
 
@@ -93,9 +94,9 @@ export const useUserStore = defineStore('user', {
       if (callApi && this.token) {
         try {
           await axios.post(
-            '${API_URL}/logout',
+            `${API_URL}/logout`,
             {},
-            { headers: { Authorization: `Bearer ${token}` } }
+            { headers: { Authorization: `Bearer ${this.token}` } }
           )
           // tu peux vérifier le status si nécessaire (ex: 204 ou 200)
         } catch (err) {
