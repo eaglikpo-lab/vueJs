@@ -4,7 +4,7 @@ import router from '../router'    // si nécessaire pour redirection dans store
 import axios from 'axios'
 
 
-const api = axios.create({ baseURL: 'http://127.0.0.1:8000/api' })
+const api = axios.create({ baseURL: '${API_URL}' })
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -55,7 +55,7 @@ export const useUserStore = defineStore('user', {
     async login(email, password) {
       try {
         const { data } = await axios.post(
-          'http://127.0.0.1:8000/api/login',
+          '${API_URL}/login',
           { email, password }
         )
 
@@ -93,7 +93,7 @@ export const useUserStore = defineStore('user', {
       if (callApi && this.token) {
         try {
           await axios.post(
-            'http://127.0.0.1:8000/api/logout',
+            '${API_URL}/logout',
             {},
             { headers: { Authorization: `Bearer ${token}` } }
           )

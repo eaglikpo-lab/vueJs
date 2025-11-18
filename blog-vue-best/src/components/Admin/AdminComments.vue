@@ -58,21 +58,21 @@ const user = storedUser ? JSON.parse(storedUser) : null
 const token = user?.token || ''
 
 const fetchComments = async () => {
-  const res = await axios.get('http://127.0.0.1:8000/api/admin/comments', {
+  const res = await axios.get('${API_URL}/admin/comments', {
     headers: { Authorization: `Bearer ${token}` }
   })
   comments.value = res.data
 }
 
 const updateStatus = async (id, status) => {
-  await axios.put(`http://127.0.0.1:8000/api/admin/comments/${id}/status`, { status }, {
+  await axios.put(`${API_URL}/admin/comments/${id}/status`, { status }, {
     headers: { Authorization: `Bearer ${token}` }
   })
   fetchComments()
 }
 
 const deleteComment = async (id) => {
-  await axios.delete(`http://127.0.0.1:8000/api/admin/comments/${id}`, {
+  await axios.delete(`${API_URL}/admin/comments/${id}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   comments.value = comments.value.filter(c => c.id !== id)
@@ -163,7 +163,7 @@ const token = localStorage.getItem("authToken");
 async function fetchComments() {
   if (!articleId.value) return (errorMessage.value = "Veuillez entrer un ID d'article !");
   try {
-    const res = await axios.get(`http://127.0.0.1:8000/api/articles/${articleId.value}/comments`);
+    const res = await axios.get(`${API_URL}/articles/${articleId.value}/comments`);
 
     console.log(res);
     if (res.status === 403) {
@@ -183,7 +183,7 @@ async function fetchComments() {
 async function deleteComment(id) {
   if (!confirm("Supprimer ce commentaire?")) return;
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/comments/${id}`, {
+    const res = await fetch(`${API_URL}/comments/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -209,11 +209,11 @@ async function submitComment() {
     let body = {};
 
     if (mode.value === "add" || mode.value === "reply") {
-      url = `http://127.0.0.1:8000/api/articles/${articleId.value}/comments`;
+      url = `${API_URL}/articles/${articleId.value}/comments`;
       method = "POST";
       body = { contenu: contenu.value, parent_id: parentId.value };
     } else if (mode.value === "edit") {
-      url = `http://127.0.0.1:8000/api/comments/${editId.value}`;
+      url = `${API_URL}/comments/${editId.value}`;
       method = "PUT";
       body = { contenu: contenu.value };
     }

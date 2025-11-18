@@ -90,6 +90,7 @@
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
+import { API_URL } from '../../utils/contants';
 
 const router = useRouter();
 
@@ -113,7 +114,7 @@ const previewArticle = (id) => {
 // ✅ Charger tous les articles
 async function fetchArticles() {
   try {
-    const res = await axios.get('http://127.0.0.1:8000/api/articles', {
+    const res = await axios.get(`${API_URL}/articles`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     articles.value = res.data.data
@@ -124,7 +125,7 @@ async function fetchArticles() {
 
 
 // Fetch catégories (url optionnelle pour pagination)
-async function fetchCategories(url = 'http://127.0.0.1:8000/api/categories') {
+async function fetchCategories(url = `${API_URL}/categories`) {
   try {
     const res = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` }
@@ -148,13 +149,13 @@ async function handleSubmit() {
     if (form.value.image) formData.append('image', form.value.image)
 
     if (isEditing.value) {
-      await axios.post(`http://127.0.0.1:8000/api/admin/articles/${currentId.value}?_method=PUT`, formData, {
+      await axios.post(`${API_URL}/admin/articles/${currentId.value}?_method=PUT`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       })
     } else {
       console.log(token);
 
-      await axios.post('http://127.0.0.1:8000/api/admin/articles', formData, {
+      await axios.post(`${API_URL}/admin/articles`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       })
     }
@@ -170,7 +171,7 @@ async function handleSubmit() {
 async function deleteArticle(id) {
   if (!confirm('Supprimer cet article ?')) return
   try {
-    await axios.delete(`http://127.0.0.1:8000/api/articles/${id}`, {
+    await axios.delete(`${API_URL}/articles/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     fetchArticles()

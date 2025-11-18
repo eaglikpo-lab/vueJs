@@ -71,6 +71,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { API_URL } from "../../utils/contants";
 
 // --- Variables
 const users = ref([]);
@@ -89,7 +90,7 @@ const fetchUsers = async () => {
     console.log(token);
 
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/users", {
+        const res = await axios.get(`${API_URL}/admin/users`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         users.value = res.data;
@@ -102,7 +103,7 @@ const fetchUsers = async () => {
 const deleteUser = async (userId) => {
     if (!confirm("Voulez-vous vraiment supprimer l'utilisateur " + userId + "?")) return;
     try {
-        await axios.delete(`http://127.0.0.1:8000/api/admin/users/${userId}`, {
+        await axios.delete(`${API_URL}/admin/users/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         users.value = users.value.filter((u) => u.id !== userId);
@@ -118,7 +119,7 @@ const toggleRole = async (user) => {
     const newRole = user.role === "admin" ? "user" : "admin";
     try {
         const res = await axios.put(
-            `http://127.0.0.1:8000/api/admin/users/${user.id}/role`,
+            `${API_URL}/admin/users/${user.id}/role`,
             { role: newRole },
             {
                 headers: { Authorization: `Bearer ${token}` },

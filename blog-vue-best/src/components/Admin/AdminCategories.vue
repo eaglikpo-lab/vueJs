@@ -91,6 +91,7 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import { API_URL } from '../../utils/contants'
 
 const categories = ref([])
 const meta = ref(null) // pour pagination si existante
@@ -111,7 +112,7 @@ const truncate = (text, len = 100) => {
 }
 
 // Fetch catégories (url optionnelle pour pagination)
-async function fetchCategories(url = 'http://127.0.0.1:8000/api/categories') {
+async function fetchCategories(url = `${API_URL}/categories`) {
   try {
     const res = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` }
@@ -148,7 +149,7 @@ async function createCategory() {
   }
 
   try {
-    const res = await axios.post('http://127.0.0.1:8000/api/admin/categories', {
+    const res = await axios.post(`${API_URL}/admin/categories`, {
       nom: form.value.nom,
       description: form.value.description
     }, {
@@ -196,7 +197,7 @@ async function updateCategory() {
   }
 
   try {
-    const res = await axios.put(`http://127.0.0.1:8000/api/admin/categories/${editing.value.id}`, {
+    const res = await axios.put(`${API_URL}/admin/categories/${editing.value.id}`, {
       nom: editing.value.nom,
       description: editing.value.description
     }, {
@@ -232,7 +233,7 @@ function confirmDelete(cat) {
 
 async function deleteCategory(id) {
   try {
-    await axios.delete(`http://127.0.0.1:8000/api/admin/categories/${id}`, {
+    await axios.delete(`${API_URL}/admin/categories/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     categories.value = categories.value.filter(c => c.id !== id)

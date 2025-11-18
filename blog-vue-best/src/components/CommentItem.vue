@@ -75,6 +75,7 @@ import { ref } from "vue"
 import { defineAsyncComponent } from "vue"
 import axios from "axios"
 import { useUserStore } from "../store/user"
+import { API_URL } from "../utils/contants"
 const userStore = useUserStore()
 const userState = userStore.$state
 
@@ -129,7 +130,7 @@ async function saveEdit() {
   if (!editingContent.value.trim()) return
   try {
     // Appel PUT à Laravel API : /api/comments/{id}
-    const url = `http://127.0.0.1:8000/api/comments/${props.comment.id}`
+    const url = `${API_URL}/comments/${props.comment.id}`
     const payload = { contenu: editingContent.value } // adapter si API attend 'content'
       const token = userState.token
       console.log("token", token);
