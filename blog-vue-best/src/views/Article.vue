@@ -161,10 +161,6 @@ async function addComment() {
         //     { headers: { Authorization: `Bearer ${token}` } }
         // )
 
-        // const res = await api.post(`/articles/${article.value.id}/comments`, {
-        //     contenu: newComment.value
-        // })
-
         const res = await axios.post(
             `${API_URL}/articles/${article.value.id}/comments`,
             { contenu: newComment.value },
@@ -201,7 +197,11 @@ async function handleDelete(id) {
         //     headers: { Authorization: `Bearer ${token}` }
         // })
 
-        await api.delete(`/comments/${id}`)
+        await axios.delete(`${API_URL}/comments/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+
+        // await api.delete(`/comments/${id}`)
         const removeRecursively = (arr) =>
             arr.filter((c) => {
                 if (c.replies) c.replies = removeRecursively(c.replies)
@@ -222,10 +222,17 @@ async function handleReply({ parentId, content }) {
         //     { headers: { Authorization: `Bearer ${token}` } }
         // )
 
-        const res = await api.post(`/articles/${article.value.id}/comments`, {
-            contenu: content,
-            parent_id: parentId
-        })
+        // const res = await api.post(`/articles/${article.value.id}/comments`, {
+        //     contenu: content,
+        //     parent_id: parentId
+        // })
+
+         const res = await axios.post(
+            `${API_URL}/articles/${article.value.id}/comments`,
+            { contenu: content, parent_id: parentId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+
 
         const newReply = normalizeComment(res.data.comment ?? res.data)
 
