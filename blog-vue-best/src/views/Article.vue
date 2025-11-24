@@ -1,6 +1,6 @@
 <template>
     <div v-if="previewMode" class="bg-yellow-100 text-yellow-800 text-center py-2 mb-4 font-semibold">
-      🔍 Vous êtes en mode aperçu administrateur
+        🔍 Vous êtes en mode aperçu administrateur
     </div>
 
     <div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-xl">
@@ -83,10 +83,10 @@ const previewMode = ref(false);
 const token = userState.token
 const isAuthenticated = !!token
 
-const user = userState?userState.user:null
+const user = userState ? userState.user : null
 // console.log(user);
 
-const uId = ref(user? user.id : null) // Accéder à l'email
+const uId = ref(user ? user.id : null) // Accéder à l'email
 // console.log(userId.value);
 
 const userId = Number(uId.value) // s'assurer number
@@ -94,20 +94,20 @@ console.log(userId);
 
 
 function handleUpdated(updated) {
-  // recherche récursive pour mettre à jour le commentaire dans comments (comme before)
-  const updateRecursively = (arr) => {
-    for (const c of arr) {
-      if (c.id === updated.id) {
-        c.content = updated.content
-        return true
-      }
-      if (c.replies) {
-        if (updateRecursively(c.replies)) return true
-      }
+    // recherche récursive pour mettre à jour le commentaire dans comments (comme before)
+    const updateRecursively = (arr) => {
+        for (const c of arr) {
+            if (c.id === updated.id) {
+                c.content = updated.content
+                return true
+            }
+            if (c.replies) {
+                if (updateRecursively(c.replies)) return true
+            }
+        }
+        return false
     }
-    return false
-  }
-  updateRecursively(comments.value)
+    updateRecursively(comments.value)
 }
 
 
@@ -132,7 +132,7 @@ onMounted(async () => {
     console.log(id);
     try {
         const [articleRes, commentRes] = await Promise.all([
-            
+
             // axios.get(`http://localhost:8000/api/articles/${id}`),
             // axios.get(`http://localhost:8000/api/articles/${id}/comments`)
             await api.get(`/articles/${id}`),
@@ -145,7 +145,7 @@ onMounted(async () => {
         // normaliser la liste des commentaires
         const serverComments = commentRes.data.comments ?? commentRes.data
         comments.value = Array.isArray(serverComments) ? serverComments.map(normalizeComment) : []
-        
+
     } catch (err) {
         console.error(err)
     }
@@ -161,9 +161,15 @@ async function addComment() {
         //     { headers: { Authorization: `Bearer ${token}` } }
         // )
 
-        const res= await api.post(`/articles/${article.value.id}/comments`, {
-            contenu: newComment.value
-        })
+        // const res = await api.post(`/articles/${article.value.id}/comments`, {
+        //     contenu: newComment.value
+        // })
+
+        const res = await axios.post(
+            `${API_URL}/articles/${article.value.id}/comments`,
+            { contenu: newComment.value },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
 
         // la réponse peut être { message: ..., comment: {...} }
         const serverComment = res.data.comment ?? res.data
@@ -242,7 +248,7 @@ async function handleReply({ parentId, content }) {
             console.error(err)
             alert("Connectez vous pour commentez cet article")
         } else {
-            alert("Erreur lors de la publication de la réponse.") 
+            alert("Erreur lors de la publication de la réponse.")
         }
     }
 }
