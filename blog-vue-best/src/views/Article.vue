@@ -161,7 +161,7 @@ async function addComment() {
         //     { headers: { Authorization: `Bearer ${token}` } }
         // )
 
-        const res= await axios.post(`/articles/${article.value.id}/comments`, {
+        const res= await api.post(`/articles/${article.value.id}/comments`, {
             contenu: newComment.value
         })
 
