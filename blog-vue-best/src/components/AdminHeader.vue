@@ -26,14 +26,23 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../store/user'
+import { AuthService } from '../services/auth'
 const userStore = useUserStore()
 const router = useRouter()
+
+const authService = new AuthService();
 
 function goDashboard() {
   router.push('/admin')
 }
 
-function logout() {
- userStore.logout()
+async function logout() {
+  await authService.logout();
+
+  console.log("logout success");
+  
+  userStore.clearAuthUserData();
+  authService.reset();
+  router.push('/');
 }
 </script>

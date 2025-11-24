@@ -43,10 +43,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../store/user'
-const userStore = useUserStore()
+import { useUserStore } from '../store/user';
+import { AuthService } from '../services/auth';
 
+const userStore = useUserStore()
 const router = useRouter()      // Pour la navigation après login
+
+const authService = new AuthService();
 
 // Champs du formulaire
 const email = ref('')
@@ -55,7 +58,19 @@ const error = ref(null)
 
 async function login() {
     try {
-        await userStore.login(email.value, password.value)
+        await authService.login(email.value, password.value)
+      // await userStore.login(email.value, password.value)
+
+      userStore.setUserAndToken(authService.user, authService.token);
+
+      // Redirection selon le rôle
+      if (authService.user.role === "admin") {
+        router.push("/admin");
+      } else if (authService.user.role === "user") {
+        router.push("/user");
+      } else {
+        router.push("/");
+      }
     } catch (err) {
         error.value = err.response?.data.message || 'Erreur inconnue'
     }

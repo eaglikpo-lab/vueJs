@@ -68,6 +68,9 @@ import { useRoute } from "vue-router"
 import axios from "axios"
 import CommentItem from "../components/CommentItem.vue"
 import { useUserStore } from "../store/user"
+import { API_URL } from "../utils/contants";
+import api from "../libs/axios"
+
 const userStore = useUserStore()
 const userState = userStore.$state
 
@@ -129,8 +132,11 @@ onMounted(async () => {
     console.log(id);
     try {
         const [articleRes, commentRes] = await Promise.all([
-            axios.get(`http://localhost:8000/api/articles/${id}`),
-            axios.get(`http://localhost:8000/api/articles/${id}/comments`)
+            
+            // axios.get(`http://localhost:8000/api/articles/${id}`),
+            // axios.get(`http://localhost:8000/api/articles/${id}/comments`)
+            await api.get(`/articles/${id}`),
+            await api.get(`/articles/${id}/comments`)
         ])
 
         // articleRes.data peut contenir directement l'article ou { article: ... }
@@ -149,11 +155,15 @@ onMounted(async () => {
 async function addComment() {
     if (!newComment.value.trim()) return
     try {
-        const res = await axios.post(
-            `http://localhost:8000/api/articles/${article.value.id}/comments`,
-            { contenu: newComment.value }, // ton backend attend 'contenu'
-            { headers: { Authorization: `Bearer ${token}` } }
-        )
+        // const res = await axios.post(
+        //     `http://localhost:8000/api/articles/${article.value.id}/comments`,
+        //     { contenu: newComment.value }, 
+        //     { headers: { Authorization: `Bearer ${token}` } }
+        // )
+
+        const res= await axios.post(`/articles/${article.value.id}/comments`, {
+            contenu: newComment.value
+        })
 
         // la réponse peut être { message: ..., comment: {...} }
         const serverComment = res.data.comment ?? res.data
@@ -181,9 +191,11 @@ function clearNewComment() {
 async function handleDelete(id) {
     if (!confirm("Supprimer ce commentaire ?")) return
     try {
-        await axios.delete(`http://localhost:8000/api/comments/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+        // await axios.delete(`http://localhost:8000/api/comments/${id}`, {
+        //     headers: { Authorization: `Bearer ${token}` }
+        // })
+
+        await api.delete(`/comments/${id}`)
         const removeRecursively = (arr) =>
             arr.filter((c) => {
                 if (c.replies) c.replies = removeRecursively(c.replies)
@@ -198,11 +210,16 @@ async function handleDelete(id) {
 
 async function handleReply({ parentId, content }) {
     try {
-        const res = await axios.post(
-            `http://localhost:8000/api/articles/${article.value.id}/comments`,
-            { contenu: content, parent_id: parentId },
-            { headers: { Authorization: `Bearer ${token}` } }
-        )
+        // const res = await axios.post(
+        //     `http://localhost:8000/api/articles/${article.value.id}/comments`,
+        //     { contenu: content, parent_id: parentId },
+        //     { headers: { Authorization: `Bearer ${token}` } }
+        // )
+
+        const res = await api.post(`/articles/${article.value.id}/comments`, {
+            contenu: content,
+            parent_id: parentId
+        })
 
         const newReply = normalizeComment(res.data.comment ?? res.data)
 

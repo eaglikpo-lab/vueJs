@@ -99,7 +99,14 @@ async function resetPassword() {
   message.value = ''
   error.value = ''
   try {
-    const response = await axios.post('http://localhost:8000/api/reset-password', {
+    // const response = await axios.post('http://localhost:8000/api/reset-password', {
+    //   email: email.value,
+    //   code: code.value,
+    //   password: password.value,
+    //   password_confirmation: password_confirmation.value
+    // })
+
+    const response = await axios.post(`reset-password`, {
       email: email.value,
       code: code.value,
       password: password.value,

@@ -74,6 +74,8 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute } from 'vue-router'
 import { useUserStore } from '../store/user'
+import { API_URL } from "../utils/contants";
+import api from "../libs/axios";
 
 const route = useRoute();
 
@@ -100,7 +102,8 @@ console.log(userId.value);
 // Charger les catégories
 const fetchCategories = async () => {
   try {
-    const res = await axios.get("http://localhost:8000/api/categories");
+    // const res = await axios.get("http://localhost:8000/api/categories");
+    const res = await axios.get(API_URL + "/categories");
     categories.value = res.data;
   } catch (err) {
     console.error('fetchCategories error', err);
@@ -111,7 +114,8 @@ const fetchCategories = async () => {
 // Charger les articles
 const fetchArticles = async () => {
   try {
-    const res = await axios.get("http://localhost:8000/api/articles");
+    // const res = await axios.get("http://localhost:8000/api/articles");
+    const res = await api.get("/articles");
     if (Array.isArray(res.data.data)) {
       articles.value = res.data.data;
       filteredArticles.value = res.data.data;

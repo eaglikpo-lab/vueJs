@@ -1,104 +1,20 @@
-<!-- <template>
-  <section class="p-6 bg-gray-50 min-h-screen">
-    <h2 class="text-3xl font-bold text-blue-600 mb-6">Gestion des commentaires 💬</h2>
-
-    <table class="min-w-full bg-white rounded-xl shadow-lg">
-      <thead class="bg-blue-600 text-white">
-        <tr>
-          <th class="py-3 px-4 text-left">Auteur</th>
-          <th class="py-3 px-4 text-left">Article</th>
-          <th class="py-3 px-4 text-left">Commentaire</th>
-          <th class="py-3 px-4 text-left">Statut</th>
-          <th class="py-3 px-4 text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="comment in comments" :key="comment.id" class="border-b hover:bg-gray-100">
-          <td class="py-3 px-4">{{ comment.user.name }}</td>
-          <td class="py-3 px-4">{{ comment.article.title }}</td>
-          <td class="py-3 px-4">{{ comment.content }}</td>
-          <td class="py-3 px-4">
-            <span
-              :class="comment.status === 'approved'
-                ? 'text-green-600 font-semibold'
-                : 'text-yellow-600 font-semibold'"
-            >
-              {{ comment.status }}
-            </span>
-          </td>
-          <td class="py-3 px-4 text-center space-x-2">
-            <button
-              v-if="comment.status !== 'approved'"
-              @click="updateStatus(comment.id, 'approved')"
-              class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition"
-            >
-              Approuver
-            </button>
-            <button
-              @click="deleteComment(comment.id)"
-              class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition"
-            >
-              Supprimer
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-</template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
-const comments = ref([])
-
-const storedUser = localStorage.getItem('user')
-const user = storedUser ? JSON.parse(storedUser) : null
-const token = user?.token || ''
-
-const fetchComments = async () => {
-  const res = await axios.get('${API_URL}/admin/comments', {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  comments.value = res.data
-}
-
-const updateStatus = async (id, status) => {
-  await axios.put(`${API_URL}/admin/comments/${id}/status`, { status }, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  fetchComments()
-}
-
-const deleteComment = async (id) => {
-  await axios.delete(`${API_URL}/admin/comments/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  comments.value = comments.value.filter(c => c.id !== id)
-}
-
-onMounted(fetchComments)
-</script> -->
-
-
 <template>
   <div class="admin-comments">
     <h2>Gestion des commentaires</h2>
-
+    
     <!-- Sélection d'un article -->
     <div class="article-select">
       <label for="id"
         class="px-3 py-2 bg-blue-100 cursor-pointer border-amber-50 shadow rounded  text-center font-medium">Id le
         l'article à filtrer</label>
-      <input name="id" v-model="articleId" type="number" placeholder="Entrez l'ID de l'article"
+        <input name="id" v-model="articleId" type="number" placeholder="Entrez l'ID de l'article"
         class="bg-white-200 cursor-pointer border-amber-50 shadow rounded  text-center font-medium" />
-      <button @click="fetchComments"
+        <button @click="fetchComments"
         class="px-3 py-2 cursor-pointer bg-blue-400 rounded shadow font-medium hover:bg-blue-700">Charger les
         commentaires</button>
-    </div>
-
-    <!-- Message d'erreur -->
+      </div>
+      
+      <!-- Message d'erreur -->
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
 
     <!-- Liste des commentaires -->
@@ -148,6 +64,7 @@ onMounted(fetchComments)
 <script setup>
 import axios from "axios";
 import { ref } from "vue";
+import { API_URL } from "../../utils/contants";
 
 const articleId = ref("");
 const comments = ref([]);
@@ -320,3 +237,160 @@ function cancelAction() {
   margin-right: 0.5rem;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <template>
+  <section class="p-6 bg-gray-50 min-h-screen">
+    <h2 class="text-3xl font-bold text-blue-600 mb-6">Gestion des commentaires 💬</h2>
+
+    <table class="min-w-full bg-white rounded-xl shadow-lg">
+      <thead class="bg-blue-600 text-white">
+        <tr>
+          <th class="py-3 px-4 text-left">Auteur</th>
+          <th class="py-3 px-4 text-left">Article</th>
+          <th class="py-3 px-4 text-left">Commentaire</th>
+          <th class="py-3 px-4 text-left">Statut</th>
+          <th class="py-3 px-4 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="comment in comments" :key="comment.id" class="border-b hover:bg-gray-100">
+          <td class="py-3 px-4">{{ comment.user.name }}</td>
+          <td class="py-3 px-4">{{ comment.article.title }}</td>
+          <td class="py-3 px-4">{{ comment.content }}</td>
+          <td class="py-3 px-4">
+            <span
+              :class="comment.status === 'approved'
+                ? 'text-green-600 font-semibold'
+                : 'text-yellow-600 font-semibold'"
+            >
+              {{ comment.status }}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-center space-x-2">
+            <button
+              v-if="comment.status !== 'approved'"
+              @click="updateStatus(comment.id, 'approved')"
+              class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition"
+            >
+              Approuver
+            </button>
+            <button
+              @click="deleteComment(comment.id)"
+              class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition"
+            >
+              Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const comments = ref([])
+
+const storedUser = localStorage.getItem('user')
+const user = storedUser ? JSON.parse(storedUser) : null
+const token = user?.token || ''
+
+const fetchComments = async () => {
+  const res = await axios.get('${API_URL}/admin/comments', {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  comments.value = res.data
+}
+
+const updateStatus = async (id, status) => {
+  await axios.put(`${API_URL}/admin/comments/${id}/status`, { status }, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  fetchComments()
+}
+
+const deleteComment = async (id) => {
+  await axios.delete(`${API_URL}/admin/comments/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  comments.value = comments.value.filter(c => c.id !== id)
+}
+
+onMounted(fetchComments)
+</script> -->

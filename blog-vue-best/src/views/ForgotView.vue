@@ -47,6 +47,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import LoginModal from "../components/LoginModal.vue";
+import api from '../libs/axios';
 
 
 const email = ref('')
@@ -60,9 +61,14 @@ async function sendResetCode() {
   message.value = ''
   error.value = ''
   try {
-    const response = await axios.post('http://localhost:8000/api/forgot-password', {
+    // const response = await axios.post('http://localhost:8000/api/forgot-password', {
+    //   email: email.value
+    // })
+
+    const response = api.post('forgot-password', {
       email: email.value
     })
+
     message.value = response.data.message || 'Un code de réinitialisation vous a été envoyé.'
     // Rediriger vers la page de reset après 2s
     setTimeout(() => router.push('/reset-password'), 2000)

@@ -32,16 +32,17 @@ import { useUserStore } from './store/user'
 const route = useRoute()
 
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const userStore = useUserStore()
-const { userRole } = storeToRefs(userStore) // userRole est désormais une Ref réactive
+// const { userRole } = storeToRefs(userStore) // userRole est désormais une Ref réactive
 console.log(userStore);
+const userRole = computed(() =>userStore.user?.role ?? null)
 
 
 onMounted(() => {
   userStore.initFromLocalStorage();
-  console.log(userRole.value);
+  console.log("user role", userRole.value);
 })
 
 </script>
